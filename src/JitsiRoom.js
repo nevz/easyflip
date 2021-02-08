@@ -31,6 +31,7 @@ function JitsiRoom(props) {
       setSocket(socket);
       socket.on('notifyBreakout', changeRoom);
       socket.emit('joinRoom', roomName);
+      socket.emit('setUserName', localStorage.getItem('userToken'));
     }, []);
 
     function removeConference(){
@@ -68,7 +69,10 @@ function JitsiRoom(props) {
     function sendToBreakout(event){
         const participants = API.getParticipantsInfo();
         console.log(participants[0]);
-        socket.emit('sendToBreakout', roomName);
+        socket.emit('sendToBreakout', {
+          'roomName': roomName,
+          'participants': participants,
+        });
     } 
 
     function joinSocketRoom(newRoomName){
