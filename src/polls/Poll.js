@@ -57,8 +57,6 @@ function DisplayPoll(props){
 }
 
 function VotePoll(props){
-
-
     const [vote, setVote] = useState(false);
     const listAlternatives = (props.poll.alternatives || []).map((alternative, index) => 
     <li key={"alternativevote" + index}>
