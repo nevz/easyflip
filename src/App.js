@@ -1,5 +1,5 @@
 
-import { JitsiRoom } from './JitsiRoom';
+import { JitsiRoom } from './jitsi-room/JitsiRoom';
 import { JoinRoom } from './JoinRoom';
 
 import React, {useEffect} from 'react';

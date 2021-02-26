@@ -1,4 +1,4 @@
-import { createRoomsBySize } from './functions.js';
+import { createRoomsBySize } from '../functions.js';
 import { NewPollDialog} from './polls/NewPollDialog';
 import { AnswerPollDialog } from './polls/AnswerPollDialog';
 import Button from 'react-bootstrap/Button';
@@ -11,24 +11,25 @@ import { useHistory } from 'react-router-dom';
 
 import React, { useEffect, useState} from 'react'
 
+const socket = socketIOClient('localhost:9000', {
+  withCredentials: true
+ });
 
 function JitsiRoom(props) {
     const history = useHistory();
 
-    var {roomName} = useParams();
+    const { roomName } = useParams();
+
+    const [ currentRoomName, setCurrentRoomName] = useState(undefined);
 
     const [API, setAPI] = useState({});
-    const [socket, setSocket] = useState(undefined);
 
 
     const domain = 'easyflip.repositorium.cl';
 
     //join socket
     useEffect(() => {
-      const socket = socketIOClient('localhost:9000', {
-        withCredentials: true
-      });
-      setSocket(socket);
+      setCurrentRoomName(roomName);
       socket.on('notifyBreakout', changeRoom);
       socket.emit('joinRoom', roomName);
       socket.emit('setUserName', localStorage.getItem('userToken'));
@@ -41,6 +42,7 @@ function JitsiRoom(props) {
         console.log(error)
       }
     }
+
     function joinJitsiRoom(newRoomName){
       removeConference();
       var script = document.createElement('script');
@@ -69,10 +71,7 @@ function JitsiRoom(props) {
     function sendToBreakout(event){
         const participants = API.getParticipantsInfo();
         console.log(participants[0]);
-        socket.emit('sendToBreakout', {
-          'roomName': roomName,
-          'participants': participants,
-        });
+        socket.emit('sendToBreakout', roomName, participants, '5ff71dc25938cf2873d7b751');
     } 
 
     function joinSocketRoom(newRoomName){
@@ -87,13 +86,22 @@ function JitsiRoom(props) {
       history.push('/new' + roomName);
   }
 
+  //called when the question of the room is changed
+  function questionChanged(){
+    
+  }
+
+  function answerChanged(){
+    console.log('answer changed')
+  }
+
     return (
     <div>
-        <div id='jitsi' height='700' ></div>
-        <Button onClick={sendToBreakout}>Send</Button>
-        <Button onClick={changeRoom}>New Room</Button>
-        <NewPollDialog />
-        <AnswerPollDialog />
+      <div id='jitsi' height='700' ></div>
+      <Button onClick={sendToBreakout}>Send</Button>
+      <Button onClick={changeRoom}>New Room</Button>
+      <NewPollDialog />
+      <AnswerPollDialog pollId='5ff71dc25938cf2873d7b751' onSubmit={answerChanged}/>
     </div>
     );
 }

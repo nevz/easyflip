@@ -21,16 +21,16 @@ function Poll(props){
     function displayPoll(){
         if(props.mode==="vote"){
             return(
-                <VotePoll poll={poll} /> 
+                <VotePoll poll={poll} {...props}/> 
             )
         }
         else if(props.mode==="results"){
             return(
-                <ResultsPoll poll={poll} />
+                <ResultsPoll poll={poll} {...props}/>
             )
         }
         return (
-            <DisplayPoll poll={poll} />
+            <DisplayPoll poll={poll} {...props}/>
         )
     }
 
@@ -81,6 +81,7 @@ function VotePoll(props){
             .then(response => response.json());
         
         setVote(vote);
+        props.onSubmit();
     }
 
     function getVote(){

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Poll } from './Poll';
 
 
-function AnswerPollDialog() {
+function AnswerPollDialog(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -20,7 +20,7 @@ function AnswerPollDialog() {
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><Poll mode='vote' pollId='5ff71dc25938cf2873d7b751' /></Modal.Body>
+                <Modal.Body><Poll mode='vote' {...props}/></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                                 Close
