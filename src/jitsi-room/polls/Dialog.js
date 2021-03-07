@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { VotePoll } from './Poll';
 
 
-function AnswerPollDialog(props) {
+function Dialog(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -18,22 +18,28 @@ function AnswerPollDialog(props) {
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
-                Vote
+                {props.buttonText}
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>{ props.headerText }</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><VotePoll {...props}/></Modal.Body>
+                <Modal.Body>{ props.children }</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
+                    { props.footer }
+                    <Button variant='secondary' onClick={handleClose}>Close</Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 }
 
-export { AnswerPollDialog };
+function TestDialog(props){
+
+    return( 
+    <Dialog buttonText='ola' body={<h1>oliiiiii</h1>} footer={<Button variant='secondary'>Close</Button>} />)
+
+}
+
+export { Dialog, TestDialog };

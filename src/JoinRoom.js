@@ -11,7 +11,6 @@ function JoinRoom(props) {
     const [roomName, setRoomName] = useState("EnterRoomName");
 
     function JoinRoom(){
-        console.log(props.history);
         history.push('/' + roomName);
 
     }

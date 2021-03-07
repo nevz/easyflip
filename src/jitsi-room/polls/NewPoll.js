@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import {Dialog} from './Dialog';
 
-function NewPoll() {
+
+function NewPoll(props) {
     const [postData, setPostData] = useState(null);
     const [question, setQuestion] = useState("");
     const [alternatives, setAlternatives] = useState(["Alternative A", "Alternative B", "Alternative C"])
@@ -18,7 +21,7 @@ function NewPoll() {
         setAlternatives([...newAlternatives])
     }
 
-        function alternativeChange(event, index){
+    function alternativeChange(event, index){
         const updatedValue = event.target.value;
         var newAlternatives = [...alternatives];
         newAlternatives[index] = updatedValue;
@@ -35,7 +38,6 @@ function NewPoll() {
     }
     
     function makePostRequest(event){
-        event.preventDefault();
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -48,7 +50,13 @@ function NewPoll() {
             .then(response => response.json())
             .then(data => {
                 setPostData(data)
+                props.getPollId(data._id);
             });
+    }
+
+    function onSubmit(event){
+        event.preventDefault();
+        makePostRequest(event);
     }
 
     function getPostedQuestion(){
@@ -73,22 +81,27 @@ function NewPoll() {
         <Link to={postData._id + "/results"}>See results here</Link>
     */
 
-    return (
-        <div>
+    function dialogFooter(){
+    return(<Button onClick={onSubmit}> Submit </Button>)
+    }
+
+    return( 
+        <Dialog headerText='Create a new Poll' buttonText='Make Poll' footer={dialogFooter()}>
+            <div>
             {getPostedQuestion()}
             
-            <form onSubmit={makePostRequest}>
                 <label>
                     Question:
                     <input value={question} type="text" name="name" onChange={questionChange}/>
                 </label>
                 <ol>{listAlternatives}</ol>
-                <button type="button" onClick={addAlternative}>Add Alternative</button>
+                <Button onClick={addAlternative}>Add Alternative</Button>
 
-                <input type="submit" value="Submit"/>
-            </form>
+                
         </div>
+        </Dialog>
     );
+
 }
 
 export { NewPoll };

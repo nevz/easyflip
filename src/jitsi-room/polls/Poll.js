@@ -2,14 +2,16 @@ import React, { useEffect, useState} from 'react'
 
 import './Poll.css';
 import { formatAlternative } from './util'
+import Button from 'react-bootstrap/Button';
 
 
 
 function Poll(props){
 
-    const [poll, setPoll] = useState({});
+    const [poll, setPoll] = useState(undefined);
 
     useEffect(() => {
+        console.log('fetching poll with id: ', props.pollId);
         fetch(process.env.REACT_APP_APIURL + props.pollId)
         .then(response => response.json())
         .then(data => {
@@ -17,52 +19,47 @@ function Poll(props){
         });
     }, [props.pollId]);
 
-    //TODO: buscar forma de hacer esto mas bonito
-    function displayPoll(){
-        if(props.mode==="vote"){
-            return(
-                <VotePoll poll={poll} {...props}/> 
-            )
-        }
-        else if(props.mode==="results"){
-            return(
-                <ResultsPoll poll={poll} {...props}/>
-            )
-        }
-        return (
-            <DisplayPoll poll={poll} {...props}/>
+
+
+    if(poll){
+        console.log('the poll is ', poll)
+        return(
+            <div>
+                <p>Question: {poll.question}</p>
+                <p>Alternatives:</p>
+                {props.alternativeList(poll.alternatives)}
+                {props.showUserAnswer(poll.alternatives) || ""}
+            </div>
         )
     }
-
-    return(
-        displayPoll()
-    )
+    else{
+        return(<p> There is no poll here </p>)
+    }
+    
 } 
 
 
 function DisplayPoll(props){
-    const listAlternatives = (props.poll.alternatives || []).map((alternative, index) => 
-    <li key={"alternativedisplay" + index}>
-        {alternative}
-    </li>    
-    );
 
+    function listAlternatives(alternatives){
+        const alternativeList =  (alternatives || []).map((alternative, index) => 
+        <li key={"alternativedisplay" + index}>
+            {alternative}
+        </li>    
+        );
+        return alternativeList;
+    }
     return(
-        <div>
-            <p>Question: {props.poll.question}</p>
-            <p>Alternatives:</p>
-            <ol>{listAlternatives}</ol>
-        </div>
+        <ol>        
+            <Poll {...props} alternativeList={listAlternatives}></Poll>
+        </ol>
+
     );
 }
 
 function VotePoll(props){
     const [vote, setVote] = useState(false);
-    const listAlternatives = (props.poll.alternatives || []).map((alternative, index) => 
-    <li key={"alternativevote" + index}>
-        <input type="radio" name="alternativevote" value={index} /> <label>{alternative}</label>
-    </li>    
-    );
+ 
 
     function onSubmit(event){
         event.preventDefault();
@@ -77,33 +74,43 @@ function VotePoll(props){
                 vote: vote
             })
         };
-        fetch(process.env.REACT_APP_APIURL + props.poll._id + "/vote", requestOptions)
+        fetch(process.env.REACT_APP_APIURL + props.pollId + "/vote", requestOptions)
             .then(response => response.json());
         
         setVote(vote);
         props.onSubmit();
     }
 
-    function getVote(){
+    function showUserAnswer(alternatives){
         if(vote){
-            return(<div>You voted: <br/>{formatAlternative(props.poll.alternatives[vote], vote)}</div>)
+            return(<div>You voted: <br/>{formatAlternative(alternatives[vote], vote)}</div>)
         }
         else{
             return(<div>You haven't voted yet</div>)
         }
     }
 
-    return(
+    function listAlternatives(alternatives){
+        const alternativeList = (alternatives || []).map((alternative, index) => 
+        <li key={"alternativevote" + index}>
+            <input type="radio" name="alternativevote" value={index} /> <label>{alternative}</label>
+        </li>    
+        );
+
+        return(
         <div>
-            <p>Question: {props.poll.question}</p>
             <form onSubmit={onSubmit}>
-            <ol>
-                {listAlternatives}
-            </ol>
-            <button type="submit">Submit</button>
+                <ol>
+                    {alternativeList}
+                </ol>
+            <Button type="submit" variant="primary">Submit</Button>
             </form>
-            {getVote()}
         </div>
+    )
+    }
+
+    return(
+        <Poll {...props} alternativeList={listAlternatives} showUserAnswer={showUserAnswer}></Poll>
         )
 }
 
@@ -119,16 +126,20 @@ function ResultsPoll(props){
     }
 
     useEffect(() => {
-        getResults(props.poll._id);
-    }, [props.poll._id]);
+        getResults(props.pollId);
+    }, [props.pollId]);
 
     function listAlternativesResults(){
         var zipped = (props.poll.alternatives || []).map((alt, i) => [alt, answers[i]]);
-        const ans = zipped.map(([alt,num], index) =>  
+        const alternativeList = zipped.map(([alt,num], index) =>  
         <li key={"alternativevote" + index}>
           {alt}: {num}
         </li> );
-        return ans;
+
+        return (<ol>
+            {alternativeList}
+        </ol>  
+            );
             
     }     
 
@@ -149,10 +160,7 @@ function ResultsPoll(props){
 
     return(
         <div>
-            <p>Question: {props.poll.question}</p>
-            <ol>
-                {listAlternativesResults()}
-            </ol>
+            <Poll {...props} listAlternatives={listAlternativesResults}></Poll>
 
             <button type="button" onClick={() => resetResults()}>Reset</button>
             <button type="button" onClick={() => getResults(props.poll._id)}>Update</button>
@@ -161,4 +169,4 @@ function ResultsPoll(props){
         )
 }
 
-export { Poll };
+export { Poll, VotePoll, DisplayPoll, ResultsPoll };
