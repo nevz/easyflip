@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 
  
-const socket = io('localhost:9000', {
+const socket = io(process.env.REACT_APP_SOCKETIO_URL, {
     withCredentials: true, autoConnect: false
 });
 
@@ -13,20 +13,17 @@ socket.on("session", ({ sessionID, userID }) => {
     localStorage.setItem("sessionID", sessionID);
     // save the ID of the user
     socket.userID = userID;
-    console.log('oli2')
 });
 
 
+// connects the socket and performs some authentication
 function connectSocket(){
-
-
     const sessionID = localStorage.getItem("sessionID");
     if (sessionID) {
       socket.auth = { sessionID };
-      console.log('oli')
     }
 
-    console.log('socket ' + sessionID + ' connected');
+    console.log('socket ' + socket.id + ' connected');
     socket.connect();
 }
 

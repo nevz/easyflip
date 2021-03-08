@@ -25,7 +25,7 @@ function JitsiRoom(props) {
     const [API, setAPI] = useState({});
     const [pollId, setPollId] = useState("5ff71dc25938cf2873d7b751");
 
-    const domain = 'easyflip.repositorium.cl';
+    const domain = process.env.REACT_APP_JITSI_URL;
 
    
     useEffect(() => {
@@ -69,7 +69,8 @@ function JitsiRoom(props) {
     function joinJitsiRoom(newRoomName){
       removeConference();
       var script = document.createElement('script');
-      script.src = "https://meet.jit.si/external_api.js";
+      script.src = "https://meet.jit.si/external_api.js"; //this must be changed to the self hosted one eventually, but must fix it on the server first
+
       script.async = true;
       script.onload = ()=>{ 
           const options ={
