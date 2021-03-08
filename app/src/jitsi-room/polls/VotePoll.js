@@ -1,6 +1,6 @@
 
 import { Poll } from './Poll';
-import { Dialog } from './Dialog';
+import { Dialog } from '../general/Dialog';
 import React, { useEffect, useState} from 'react'
 import { formatAlternative } from './util'
 import Button from 'react-bootstrap/Button';

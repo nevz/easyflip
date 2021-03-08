@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import {Dialog} from './Dialog';
+import {Dialog} from './../general/Dialog';
 
 
 function NewPoll(props) {

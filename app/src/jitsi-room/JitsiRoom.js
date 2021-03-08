@@ -1,5 +1,3 @@
-import { createRoomsBySize } from '../functions.js';
-import { AnswerPollDialog } from './polls/AnswerPollDialog';
 import { NewPoll } from './polls/NewPoll';
 import { VotePoll } from './polls/VotePoll';
 
