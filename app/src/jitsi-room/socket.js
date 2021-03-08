@@ -23,6 +23,7 @@ function connectSocket(){
       socket.auth = { sessionID };
     }
 
+    console.log('connecting to socket on server ', process.env.REACT_APP_SOCKETIO_URL);
     console.log('socket ' + socket.id + ' connected');
     socket.connect();
 }
