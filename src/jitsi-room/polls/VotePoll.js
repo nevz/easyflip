@@ -58,15 +58,6 @@ function VotePoll(props){
     )
     }
 
-    function dialogBody(){
-        if(props.pollId){
-            return( <Poll {...props} alternativeList={listAlternatives} showUserAnswer={showUserAnswer}></Poll>)
-        }
-        else{
-            return(<p>There is no poll set for this room yet</p>)
-        }
-    }
-
     return(
         <Dialog headerText={'vote'} buttonText={'Vote'}>
            <Poll {...props} alternativeList={listAlternatives} showUserAnswer={showUserAnswer}></Poll>

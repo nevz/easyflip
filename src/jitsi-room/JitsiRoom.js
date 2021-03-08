@@ -61,7 +61,6 @@ function JitsiRoom(props) {
 
     //is called when socket receives the roomData event. Sets the room to a new one
     function getRoomData(newRoom){
-      // tal vez poner una request aqui en vez del socket.emit
       console.log('getting data from room', newRoom);
       setPollId(newRoom.pollId);
       setRoom(prevRoom => (newRoom));
