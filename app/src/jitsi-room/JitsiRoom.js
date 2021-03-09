@@ -1,5 +1,6 @@
 import { NewPoll } from './polls/NewPoll';
 import { VotePoll } from './polls/VotePoll';
+import { BreakoutDialog } from './breakout/BreakoutDialog';
 
 import Button from 'react-bootstrap/Button';
 import {
@@ -94,9 +95,10 @@ function JitsiRoom(props) {
       }
     }
 
-    function sendToBreakout(event){
-        socket.emit('sendToBreakout', room.roomName, 2);
+    function sendToBreakout(breakoutRoomSize, breakoutOption, smartBreakoutOption){
+        socket.emit('sendToBreakout', room.roomName, breakoutRoomSize, breakoutOption, smartBreakoutOption);
     }
+
     function callToMainRoom(){
       socket.emit('callToMainRoom', room.roomName);
     }
@@ -150,11 +152,10 @@ function JitsiRoom(props) {
     return (
     <div>
       <div id='jitsi' height='700' ></div>
-      <Button onClick={sendToBreakout}>Breakout Rooms</Button>
       <Button onClick={callToMainRoom}>Return to main</Button>
       <NewPoll getPollId={getPollId}/>
       <VotePoll pollId={pollId} onSubmit={answerChanged}/>
-
+      <BreakoutDialog sendToBreakout={sendToBreakout}/>
     </div>
     );
 }

@@ -11,6 +11,7 @@ socket.on("session", ({ sessionID, userID }) => {
     socket.auth = { sessionID };
     // store it in the localStorage
     localStorage.setItem("sessionID", sessionID);
+    localStorage.setItem("userID", userID);
     // save the ID of the user
     socket.userID = userID;
 });
