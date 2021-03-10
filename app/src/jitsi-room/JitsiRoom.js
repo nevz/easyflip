@@ -1,16 +1,16 @@
-import { NewPoll } from './polls/NewPoll';
-import { VotePoll } from './polls/VotePoll';
-import { BreakoutDialog } from './breakout/BreakoutDialog';
 
 import Button from 'react-bootstrap/Button';
 import {
     useParams
   } from "react-router-dom";
 import { useHistory } from 'react-router-dom';
-
-
 import React, { useEffect, useState} from 'react';
+
 import {socket, connectSocket} from './socket';
+import { NewPoll } from './polls/NewPoll';
+import { VotePoll } from './polls/VotePoll';
+import { BreakoutDialog } from './breakout/BreakoutDialog';
+import { JitsiWindow } from './JitsiWindow';
 
 
 function JitsiRoom(props) {
@@ -21,10 +21,8 @@ function JitsiRoom(props) {
 
     const [room, setRoom] = useState(null);
 
-    const [API, setAPI] = useState({});
     const [pollId, setPollId] = useState("5ff71dc25938cf2873d7b751");
 
-    const domain = process.env.REACT_APP_JITSI_URL;
 
    
     useEffect(() => {
@@ -49,8 +47,6 @@ function JitsiRoom(props) {
       socket.on('notifyBreakout', goToBreakout);
       socket.on('pollChanged', pollChanged);
       socket.on('returnToMainRoom', returnToMainRoom);
-
-      joinJitsiRoom(room.roomName);
       socket.emit('joinRoom', room.roomName);
       console.log('the room is ', room)
       return( () => {
@@ -65,35 +61,6 @@ function JitsiRoom(props) {
       setRoom(prevRoom => (newRoom));
     }
 
-    function joinJitsiRoom(newRoomName){
-      removeConference();
-      var script = document.createElement('script');
-      script.src = "https://meet.jit.si/external_api.js"; //this must be changed to the self hosted one eventually, but must fix it on the server first
-
-      script.async = true;
-      script.onload = ()=>{ 
-          const options ={
-              roomName: newRoomName,
-              width: 700,
-              height: 700,
-              parentNode: document.getElementById('jitsi')
-          };
-          const newapi = new window.JitsiMeetExternalAPI(domain, options);
-          setAPI(newapi);
-      };
-      document.body.appendChild(script);
-      return () => {
-          document.body.removeChild(script);
-        }
-    }
-
-    function removeConference(){
-      try {
-        document.getElementById('jitsi').removeChild((document.getElementById("jitsiConferenceFrame0")));
-      } catch (error) {
-        console.log(error)
-      }
-    }
 
     function sendToBreakout(breakoutRoomSize, breakoutOption, smartBreakoutOption){
         socket.emit('sendToBreakout', room.roomName, breakoutRoomSize, breakoutOption, smartBreakoutOption);
@@ -148,10 +115,18 @@ function JitsiRoom(props) {
   }
 
 
+  function renderJitsiWindow(){
+    if(room){
+      return <JitsiWindow roomName={room.roomName} />
+    }
+    else{
+      return <p>There is no room to join here</p>
+    }
+  }
 
-    return (
+  return(
     <div>
-      <div id='jitsi' height='700' ></div>
+      {renderJitsiWindow()}
       <Button onClick={callToMainRoom}>Return to main</Button>
       <NewPoll getPollId={getPollId}/>
       <VotePoll pollId={pollId} onSubmit={answerChanged}/>

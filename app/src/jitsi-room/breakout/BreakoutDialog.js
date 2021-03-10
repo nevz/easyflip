@@ -64,7 +64,7 @@ function BreakoutDialog(props) {
                         
                         <label>{ NUMBER_LABEL[breakoutOption] }</label>
                         
-                        <input class="text" min="1" max="20" name="quantity" value={breakoutRoomSize} type="number" 
+                        <input min="1" max="20" name="quantity" value={breakoutRoomSize} type="number" 
                         onChange={onBreakoutRoomSizeChange}/>
 
                         <br></br>
