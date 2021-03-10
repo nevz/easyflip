@@ -8,7 +8,10 @@ import Button from 'react-bootstrap/Button';
 
 function VotePoll(props){
     const [vote, setVote] = useState(false);
- 
+    
+    useEffect(()=>{
+        setVote(undefined)
+    },[props.pollId]);
 
     function onSubmit(event){
         event.preventDefault();
@@ -27,7 +30,6 @@ function VotePoll(props){
             .then(response => response.json());
         
         setVote(vote);
-        props.onSubmit();
     }
 
     function showUserAnswer(alternatives){

@@ -1,7 +1,7 @@
 
 import { io } from "socket.io-client";
 
- 
+
 // Maybe it could be useful to put the socket into a react context
 
 const socket = io(process.env.REACT_APP_SOCKETIO_URL, {
@@ -20,10 +20,10 @@ socket.on("session", ({ sessionID, userID }) => {
 
 
 // connects the socket and performs some authentication
-function connectSocket(){
+function connectSocket() {
     const sessionID = localStorage.getItem("sessionID");
     if (sessionID) {
-      socket.auth = { sessionID };
+        socket.auth = { sessionID };
     }
 
     console.log('connecting to socket on server ', process.env.REACT_APP_SOCKETIO_URL);
@@ -32,4 +32,4 @@ function connectSocket(){
 }
 
 
-export {socket, connectSocket};
+export { socket, connectSocket };
