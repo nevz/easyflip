@@ -2,6 +2,8 @@
 import { io } from "socket.io-client";
 
  
+// Maybe it could be useful to put the socket into a react context
+
 const socket = io(process.env.REACT_APP_SOCKETIO_URL, {
     withCredentials: true, autoConnect: false
 });

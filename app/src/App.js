@@ -1,5 +1,5 @@
 
-import { OwnerRoom } from './jitsi-room/OwnerRoom';
+import { Room } from './jitsi-room/Room';
 import { JoinRoom } from './JoinRoom';
 
 import {
@@ -16,7 +16,7 @@ function App() {
       <Router>
       <Switch>
         <Route path={`/:roomName`}>
-          <OwnerRoom />
+          <Room />
         </Route>
         <Route path="/">
           <JoinRoom />
