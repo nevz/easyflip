@@ -13,7 +13,7 @@ import { BreakoutDialog } from './breakout/BreakoutDialog';
 import { JitsiWindow } from './JitsiWindow';
 
 
-function JitsiRoom(props) {
+function OwnerRoom(props) {
     const history = useHistory();
 
     const { roomName } = useParams();
@@ -135,4 +135,4 @@ function JitsiRoom(props) {
     );
 }
 
-export {JitsiRoom};
+export { OwnerRoom };
