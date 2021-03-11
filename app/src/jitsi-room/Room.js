@@ -36,7 +36,6 @@ function Room(props) {
       console.log('the room doesnt exist', room)
       return;
     }
-
     socket.on('notifyBreakout', goToBreakout);
     socket.on('pollChanged', pollChanged);
     socket.on('returnToMainRoom', notifyReturnToMainRoom);
