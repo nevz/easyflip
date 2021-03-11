@@ -6,6 +6,7 @@ import { OwnerMenu } from './OwnerMenu';
 import { ParticipantMenu } from './ParticipantMenu';
 import { VotePoll } from './polls/VotePoll';
 import { JitsiWindow } from './JitsiWindow';
+import { Notification } from './general/Notification';
 
 
 function Room(props) {
@@ -15,8 +16,10 @@ function Room(props) {
   const [room, setRoom] = useState(null);
   const [pollId, setPollId] = useState("5ff71dc25938cf2873d7b751");
 
-  useEffect(() => {
+  const [showBreakoutNotification, setShowBreakoutNotification] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
+  useEffect(() => {
     socket.on('roomData', getRoomData);
     connectSocket();
 
@@ -36,17 +39,14 @@ function Room(props) {
 
     socket.on('notifyBreakout', goToBreakout);
     socket.on('pollChanged', pollChanged);
-    socket.on('returnToMainRoom', returnToMainRoom);
+    socket.on('returnToMainRoom', notifyReturnToMainRoom);
+    socket.on('showResults', notifyShowResults);
     socket.emit('joinRoom', room.roomName);
     console.log('the room is ', room)
     return (() => {
       socket.emit('leaveRoom', room.roomName);
     });
   }, [room]);
-
-  function joinRoom(newRoomName) {
-    history.push('/' + newRoomName);
-  }
 
   function leaveRoom() {
     socket.emit('leaveRoom', room.roomName);
@@ -55,15 +55,25 @@ function Room(props) {
   function goToBreakout({ breakoutRoomName, originalRoomName }) {
     console.log('going to breakout from ', room.roomName, ' to ', breakoutRoomName);
     if (room.roomName === originalRoomName) {
-      joinRoom(breakoutRoomName);
+      history.push(breakoutRoomName);
     }
   }
 
-  function returnToMainRoom(mainRoomName) {
-    console.log('returning', mainRoomName, room.parent);
+  function returnToMainRoom() {
+    leaveRoom();
+    history.push(room.parent);
+  }
+
+
+  function notifyReturnToMainRoom(mainRoomName) {
     if (mainRoomName === room.parent) {
-      leaveRoom();
-      joinRoom(mainRoomName);
+      setShowBreakoutNotification(true);
+    }
+  }
+
+  function notifyShowResults(fromRoomName){
+    if(fromRoomName === room.roomName){
+      setShowResults(true);
     }
   }
 
@@ -72,11 +82,13 @@ function Room(props) {
   function getRoomData(newRoom) {
     console.log('getting data from room', newRoom);
     setRoom(prevRoom => (newRoom));
+    setPollId(newRoom.pollId);
   }
 
   //called when the question of the room is changed
   function pollChanged(fromRoomName, newPollId) {
     if (room.roomName === fromRoomName) {
+      setShowResults(false);
       setPollId(newPollId);
     }
   }
@@ -95,27 +107,35 @@ function Room(props) {
   }
 
 
+
   function roomMenu() {
     if (room) {
-
       if (room.owner === localStorage.getItem("userID"))
         return (
           <>
-            <OwnerMenu room={room} />
+            <OwnerMenu room={room} pollId={pollId} />
           </>);
       else {
-        return <ParticipantMenu pollId={pollId}/>;
+        return <ParticipantMenu room={room} returnToMain={returnToMainRoom} pollId={pollId} showResults={showResults} />;
       }
-    }
-    else {
     }
   }
 
-  return (<>
-    {renderJitsiWindow()}
-    {roomMenu()}
-  </>)
-
+  if(room){
+    return (<>
+      {renderJitsiWindow()}
+      {roomMenu()}
+      {<Notification onAccept={returnToMainRoom} setShow={setShowBreakoutNotification} show={showBreakoutNotification}>
+        <h4>You have been requested to go back to the main room by the admin</h4>
+        <p> press accept to go back now, or use the button
+          on the botton of your screen later </p>
+      </Notification>}
+    </>)
+  }
+  else{
+    return(<p>Error, no room has been found</p>);
+  }
+  
 
 }
 

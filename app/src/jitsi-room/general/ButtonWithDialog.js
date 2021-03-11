@@ -1,43 +1,42 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function Dialog(props) {
+function ButtonWithDialog({children, footer, buttonText, headerText, onSubmit=()=>{}, onClick=()=>{}}) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    function handleClick(){
+        onClick();
+        handleShow();
+    }
+
     function onSubmit(){
-        props.onSubmit();
+        onSubmit();
         handleClose();
     }
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                {props.buttonText}
+            <Button variant="primary" onClick={(handleClick)}>
+                {buttonText}
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{ props.headerText }</Modal.Title>
+                    <Modal.Title>{ headerText }</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{ props.children }</Modal.Body>
+                <Modal.Body>{ children }</Modal.Body>
                 <Modal.Footer>
-                    { props.footer }
                     <Button variant='secondary' onClick={handleClose}>Close</Button>
+                    { footer }
                 </Modal.Footer>
             </Modal>
         </>
     );
 }
 
-function TestDialog(props){
 
-    return( 
-    <Dialog buttonText='ola' body={<h1>oliiiiii</h1>} footer={<Button variant='secondary'>Close</Button>} />)
-
-}
-
-export { Dialog, TestDialog };
+export { ButtonWithDialog };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import {Dialog} from './../general/Dialog';
+import { ButtonWithDialog } from '../general/ButtonWithDialog';
 
 
 function NewPoll(props) {
@@ -8,40 +8,40 @@ function NewPoll(props) {
     const [question, setQuestion] = useState("");
     const [alternatives, setAlternatives] = useState(["Alternative A", "Alternative B", "Alternative C"])
 
-    const listAlternatives = alternatives.map((alternative, index) => 
+    const listAlternatives = alternatives.map((alternative, index) =>
         <li key={"alternative" + index}>
-            <input name={alternative + index} type="text" value={alternative} onChange={(e) => alternativeChange(e, index)}/>
+            <input name={alternative + index} type="text" value={alternative} onChange={(e) => alternativeChange(e, index)} />
             <button type="button" onClick={(e) => deleteAlternative(e, index)}> X </button>
-        </li>    
+        </li>
     )
 
-    function deleteAlternative(event, index){
+    function deleteAlternative(event, index) {
         var newAlternatives = [...alternatives];
         newAlternatives.splice(index, 1);
         setAlternatives([...newAlternatives])
     }
 
-    function alternativeChange(event, index){
+    function alternativeChange(event, index) {
         const updatedValue = event.target.value;
         var newAlternatives = [...alternatives];
         newAlternatives[index] = updatedValue;
         setAlternatives([...newAlternatives]);
     }
 
-    function questionChange(event){
+    function questionChange(event) {
         setQuestion(event.target.value)
     }
 
-    function addAlternative(event){
+    function addAlternative(event) {
         const newAlternatives = alternatives.concat(["New alternative"]);
         setAlternatives([...newAlternatives]);
     }
-    
-    function makePostRequest(event){
+
+    function makePostRequest(event) {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 question: question,
                 alternatives: alternatives
             })
@@ -54,25 +54,25 @@ function NewPoll(props) {
             });
     }
 
-    function onSubmit(event){
+    function onSubmit(event) {
         event.preventDefault();
         makePostRequest(event);
     }
 
-    function getPostedQuestion(){
-        if(postData){
-            return(
-            <div>
-                <p>You just posted:</p>
-                <p>{postData.question}</p>
-                <ol>{ (postData.alternatives || []).map((alternative, index)=>
-                    <li key={alternative+index}>{alternative}</li>)}
-                </ol>
-                
-            </div>
+    function getPostedQuestion() {
+        if (postData) {
+            return (
+                <div>
+                    <p>You just posted:</p>
+                    <p>{postData.question}</p>
+                    <ol>{(postData.alternatives || []).map((alternative, index) =>
+                        <li key={alternative + index}>{alternative}</li>)}
+                    </ol>
+
+                </div>
             )
         }
-        return(<div></div>)
+        return (<div></div>)
     }
 
     /*
@@ -81,25 +81,25 @@ function NewPoll(props) {
         <Link to={postData._id + "/results"}>See results here</Link>
     */
 
-    function dialogFooter(){
-    return(<Button onClick={onSubmit}> Submit </Button>)
+    function dialogFooter() {
+        return (<Button onClick={onSubmit}> Submit </Button>)
     }
 
-    return( 
-        <Dialog headerText='Create a new Poll' buttonText='Make Poll' footer={dialogFooter()}>
+    return (
+        <ButtonWithDialog headerText='Create a new Poll' buttonText='Make Poll' footer={dialogFooter()}>
             <div>
-            {getPostedQuestion()}
-            
+                {getPostedQuestion()}
+
                 <label>
                     Question:
-                    <input value={question} type="text" name="name" onChange={questionChange}/>
+                    <input value={question} type="text" name="name" onChange={questionChange} />
                 </label>
                 <ol>{listAlternatives}</ol>
                 <Button onClick={addAlternative}>Add Alternative</Button>
 
-                
-        </div>
-        </Dialog>
+
+            </div>
+        </ButtonWithDialog>
     );
 
 }

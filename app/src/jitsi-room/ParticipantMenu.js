@@ -4,13 +4,33 @@ import React from 'react';
 
 import { socket } from './socket';
 import { VotePoll } from './polls/VotePoll';
+import { ResultsPoll } from './polls/ResultsPoll';
 
 
-function ParticipantMenu(props) {
+function ParticipantMenu({room=null, returnToMain, pollId, showResults}) {
+
+
+
+  function showReturnToMainButton(){
+    if(room.parent){
+      return  <Button onClick={returnToMain}>Return to main room</Button>
+    }
+    else{
+      return (<></>)
+    }
+  }
+
+  function showResultsPoll(){
+    if (showResults){
+      return <ResultsPoll pollId={pollId}></ResultsPoll>
+    }
+  }
 
   return(
     <div>
-      <VotePoll pollId={props.pollId} />
+      <VotePoll pollId={pollId} />
+      {showReturnToMainButton()}
+      {showResultsPoll()}
     </div>
   );
 }

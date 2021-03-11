@@ -1,6 +1,7 @@
 
+import './Poll.css';
 import { Poll } from './Poll';
-import { Dialog } from '../general/Dialog';
+import { ButtonWithDialog } from '../general/ButtonWithDialog';
 import React, { useEffect, useState} from 'react'
 import { formatAlternative } from './util'
 import Button from 'react-bootstrap/Button';
@@ -61,9 +62,9 @@ function VotePoll(props){
     }
 
     return(
-        <Dialog headerText={'vote'} buttonText={'Vote'}>
+        <ButtonWithDialog headerText={'vote'} buttonText={'Vote'}>
            <Poll {...props} alternativeList={listAlternatives} showUserAnswer={showUserAnswer}></Poll>
-        </Dialog>
+        </ButtonWithDialog>
     )
 }
 

@@ -6,18 +6,18 @@ import Button from 'react-bootstrap/Button';
 
 
 
-function Poll(props){
+function Poll({pollId="", showUserAnswer=()=>{return "";}, alternativeList=[]}){
 
     const [poll, setPoll] = useState(undefined);
 
     useEffect(() => {
-        console.log('fetching poll with id: ', props.pollId);
-        fetch(process.env.REACT_APP_APIURL + props.pollId)
+        console.log('fetching poll with id: ', pollId);
+        fetch(process.env.REACT_APP_APIURL + pollId)
         .then(response => response.json())
         .then(data => {
             setPoll(data);
         });
-    }, [props.pollId]);
+    }, [pollId]);
 
 
 
@@ -27,8 +27,8 @@ function Poll(props){
             <div>
                 <p>Question: {poll.question}</p>
                 <p>Alternatives:</p>
-                {props.alternativeList(poll.alternatives)}
-                {props.showUserAnswer(poll.alternatives) || ""}
+                {alternativeList(poll.alternatives)}
+                {showUserAnswer(poll.alternatives) || ""}
             </div>
         )
     }
@@ -169,4 +169,4 @@ function ResultsPoll(props){
         )
 }
 
-export { Poll, VotePoll, DisplayPoll, ResultsPoll };
+export { Poll };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 
-import { Dialog } from "../general/Dialog";
+import { ButtonWithDialog } from "../general/ButtonWithDialog";
 
 
 const BREAKOUT_OPTION_LABELS = ['By group size', 'By number of groups'];
@@ -21,12 +21,12 @@ function BreakoutDialog(props) {
     const [smartBreakoutOption, setSmartBreakoutOption] = useState(0);
 
     return (
-        <Dialog
-            headerText = 'Breakout Rooms' 
-            buttonText = 'Breakout Rooms'
-            footer={ <Button onClick={sendToBreakout}>Submit</Button>   }>
-                {renderContents()}
-        </Dialog>
+        <ButtonWithDialog
+            headerText='Breakout Rooms'
+            buttonText='Breakout Rooms'
+            footer={<Button onClick={sendToBreakout}>Submit</Button>}>
+            {renderContents()}
+        </ButtonWithDialog>
     );
 
 
@@ -36,47 +36,47 @@ function BreakoutDialog(props) {
         const optionItems
             = labels.map((option, index) => (
                 <Dropdown.Item
-                    key= { option }
+                    key={option}
                     // eslint-disable-next-line react/jsx-no-bind
-                    onClick = {
+                    onClick={
                         () => {
                             setOption(index);
                         }
-                        }>
-                    { labels[index] }
+                    }>
+                    { labels[index]}
                 </Dropdown.Item>));
         return (
             <div>
-                    <DropdownButton title={labels[option]}>
-                            { optionItems }
-                    </DropdownButton>
+                <DropdownButton title={labels[option]}>
+                    {optionItems}
+                </DropdownButton>
             </div>
         );
     }
-                
-
-    function renderContents(){
-            return(
-                <>
-                    <div>
-                        <label>Options</label>
-                        {renderBreakoutOptions(BREAKOUT_OPTION_LABELS, setBreakoutOption, breakoutOption)}
-                        
-                        <label>{ NUMBER_LABEL[breakoutOption] }</label>
-                        
-                        <input min="1" max="20" name="quantity" value={breakoutRoomSize} type="number" 
-                        onChange={onBreakoutRoomSizeChange}/>
-
-                        <br></br>
-                        <label> Smart breakout options </label>
-                        {renderBreakoutOptions(SMART_BREAKOUT_OPTION_LABELS, setSmartBreakoutOption, smartBreakoutOption)}
-
-                    </div>
-                </>
 
 
-                                
-            )
+    function renderContents() {
+        return (
+            <>
+                <div>
+                    <label>Options</label>
+                    {renderBreakoutOptions(BREAKOUT_OPTION_LABELS, setBreakoutOption, breakoutOption)}
+
+                    <label>{NUMBER_LABEL[breakoutOption]}</label>
+
+                    <input min="1" max="20" name="quantity" value={breakoutRoomSize} type="number"
+                        onChange={onBreakoutRoomSizeChange} />
+
+                    <br></br>
+                    <label> Smart breakout options </label>
+                    {renderBreakoutOptions(SMART_BREAKOUT_OPTION_LABELS, setSmartBreakoutOption, smartBreakoutOption)}
+
+                </div>
+            </>
+
+
+
+        )
     }
 
     function sendToBreakout() {
@@ -85,7 +85,7 @@ function BreakoutDialog(props) {
 
 
 
-    function onBreakoutRoomSizeChange(event){
+    function onBreakoutRoomSizeChange(event) {
         setBreakoutRoomSize(event.target.value);
     }
 
