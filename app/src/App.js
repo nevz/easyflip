@@ -11,20 +11,21 @@ import {
 
 function App() {
 
+  document.title = "Easy Flip";
   return (
     <div className="App">
       <Router>
-      <Switch>
-        <Route path={`/:roomName`}>
-          <Room />
-        </Route>
-        <Route path="/">
-          <JoinRoom />
-        </Route>
-        
-      </Switch>
+        <Switch>
+          <Route path={`/:roomName`}>
+            <Room />
+          </Route>
+          <Route path="/">
+            <JoinRoom />
+          </Route>
+
+        </Switch>
       </Router>
-            
+
 
     </div>
   );
