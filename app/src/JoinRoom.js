@@ -8,7 +8,7 @@ function JoinRoom(props) {
 
     const history = useHistory();
 
-    const [roomName, setRoomName] = useState("EnterRoomName");
+    const [roomName, setRoomName] = useState("EasyFlipDefaultRoom");
 
     function JoinRoom(){
         history.push('/' + roomName);

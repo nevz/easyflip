@@ -8,6 +8,7 @@ function JitsiWindow(props) {
 
 
   useEffect(() => {
+    removeConference();
     console.log("joining jitsi conference");
     var script = document.createElement('script');
     script.src = "https://meet.jit.si/external_api.js"; //this must be changed to the self hosted one eventually, but must fix it on the server first
@@ -49,7 +50,7 @@ function JitsiWindow(props) {
         }
       })
     }
-  },[localJitsiUserID]);
+  },[localJitsiUserID, API]);
 
 
   function removeConference() {
