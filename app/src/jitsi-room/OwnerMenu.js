@@ -19,6 +19,10 @@ function OwnerMenu({room=null, pollId=""}) {
     socket.emit('callToMainRoom', room.roomName);
   }
 
+  function forceToMainRoom() {
+    socket.emit('forceToMainRoom', room.roomName);
+  }
+
   function showResultsToParticipants(){
     socket.emit('showResults', room.roomName);
   }
@@ -42,7 +46,9 @@ function OwnerMenu({room=null, pollId=""}) {
       </div>
       <div>
         <h3>Breakout options</h3>
-        <Button onClick={callToMainRoom}>Call back to main</Button>
+        <Button onClick={callToMainRoom}>Call back to main room</Button>
+        <Button onClick={forceToMainRoom}>Force to main room</Button>
+
         <BreakoutDialog sendToBreakout={sendToBreakout} />
       </div>
     </div>

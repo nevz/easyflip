@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
-import Form from 'react-bootstrap/Form';
 
 import { ButtonWithDialog } from "../general/ButtonWithDialog";
 

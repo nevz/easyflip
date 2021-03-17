@@ -62,26 +62,6 @@ function JitsiWindow(props) {
     }
   }
 
-  function onVideoConferenceJoined(event) {
-    console.log('conference joined', event);
-    console.log(event.id);
-    setLocalJitsiUserID(event.id.toString());
-    sendJitsiUsername(event.displayName);
-  }
-
-  function sendJitsiUsername(jitsiDisplayName) {
-    console.log("sending username", jitsiDisplayName);
-    socket.emit('jitsiUser', jitsiDisplayName);
-  }
-
-  function onUserNameChange(event) {
-    console.log('someone changed name ', event);
-    console.log(localJitsiUserID);
-    if (event.id === localJitsiUserID) {
-      sendJitsiUsername(event.displayname);
-    }
-  }
-
   return (
     <div id='jitsi'></div>
   )

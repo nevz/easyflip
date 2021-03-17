@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import React, { useState } from 'react';
 
-function ButtonWithDialog({children, footer, buttonText, headerText, onSubmit=()=>{}, onClick=()=>{}}) {
+function ButtonWithDialog({children, footer, buttonText, headerText, onClick=()=>{}}) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -11,11 +11,6 @@ function ButtonWithDialog({children, footer, buttonText, headerText, onSubmit=()
     function handleClick(){
         onClick();
         handleShow();
-    }
-
-    function onSubmit(){
-        onSubmit();
-        handleClose();
     }
 
     return (

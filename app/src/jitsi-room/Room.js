@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { socket, connectSocket } from './socket';
 import { OwnerMenu } from './OwnerMenu';
 import { ParticipantMenu } from './ParticipantMenu';
-import { VotePoll } from './polls/VotePoll';
 import { JitsiWindow } from './JitsiWindow';
 import { Notification } from './general/Notification';
 
@@ -39,6 +38,8 @@ function Room(props) {
     socket.on('notifyBreakout', goToBreakout);
     socket.on('pollChanged', pollChanged);
     socket.on('returnToMainRoom', notifyReturnToMainRoom);
+    socket.on('forceToMainRoom', forceReturnToMainRoom);
+
     socket.on('showResults', notifyShowResults);
     socket.emit('joinRoom', room.roomName);
     console.log('the room is ', room)
@@ -70,6 +71,12 @@ function Room(props) {
     }
   }
 
+  function forceReturnToMainRoom(mainRoomName){
+    if(mainRoomName === room.parent){
+      returnToMainRoom();
+    }
+  }
+
   function notifyShowResults(fromRoomName){
     if(fromRoomName === room.roomName){
       setShowResults(true);
@@ -90,10 +97,6 @@ function Room(props) {
       setShowResults(false);
       setPollId(newPollId);
     }
-  }
-
-  function answerChanged() {
-    return;
   }
 
   function renderJitsiWindow() {

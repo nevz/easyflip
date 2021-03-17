@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Poll } from './Poll';
 import { ButtonWithDialog } from '../general/ButtonWithDialog';
 
@@ -9,9 +9,11 @@ function ResultsPoll({ pollId = "", owner = false }) {
 
 
     function getResults(aPollId) {
-        fetch(process.env.REACT_APP_APIURL + aPollId + `/result`)
-            .then(response => response.json())
-            .then(data => setAnswers(data));
+        if (aPollId !== "") {
+            fetch(process.env.REACT_APP_APIURL + aPollId + `/result`)
+                .then(response => response.json())
+                .then(data => setAnswers(data));
+        }
     }
 
     function listAlternativesResults(alternatives) {
@@ -46,24 +48,24 @@ function ResultsPoll({ pollId = "", owner = false }) {
         if (pollId !== "") {
             return (
                 <>
-                <Poll pollId={pollId} alternativeList={listAlternativesResults}></Poll>
+                    <Poll pollId={pollId} alternativeList={listAlternativesResults}></Poll>
 
-                {
-                (() => {
-                    if (owner) { return <button type="button" onClick={() => resetResults()}>Reset</button> }
-                })()
-            }
-            <button type="button" onClick={() => getResults(pollId)}>Update</button>
-            </>
+                    {
+                        (() => {
+                            if (owner) { return <button type="button" onClick={() => resetResults()}>Reset</button> }
+                        })()
+                    }
+                    <button type="button" onClick={() => getResults(pollId)}>Update</button>
+                </>
             )
         }
-        else{
+        else {
             return <p>there is no poll here</p>
         }
     }
 
     return (
-        <ButtonWithDialog onClick={()=>{getResults(pollId)}} buttonText='Poll Results' headerText='Poll Results' >
+        <ButtonWithDialog onClick={() => { getResults(pollId) }} buttonText='Poll Results' headerText='Poll Results' >
             {renderPollWithResults()}
         </ButtonWithDialog>
     )
