@@ -33,7 +33,7 @@ function NewPoll(props) {
     }
 
     function addAlternative(event) {
-        const newAlternatives = alternatives.concat(["New alternative"]);
+        const newAlternatives = alternatives.concat(["Alternative " + String.fromCharCode(65 + alternatives.length)]);
         setAlternatives([...newAlternatives]);
     }
 
