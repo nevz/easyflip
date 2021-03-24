@@ -39,13 +39,9 @@ function Room(props) {
     socket.on('pollChanged', pollChanged);
     socket.on('returnToMainRoom', notifyReturnToMainRoom);
     socket.on('forceToMainRoom', forceReturnToMainRoom);
-
     socket.on('showResults', notifyShowResults);
     socket.emit('joinRoom', room.roomName);
-    console.log('the room is ', room)
-    return (() => {
-      socket.emit('leaveRoom', room.roomName);
-    });
+    console.log('the room is ', room);
   }, [room]);
 
   function leaveRoom() {
