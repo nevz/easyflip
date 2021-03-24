@@ -30,6 +30,7 @@ function JitsiWindow(props) {
     };
   }, [props.roomName])
 
+  /*
   useEffect(() => {
     if (API) {
       console.log("HELLOOOO")
@@ -51,7 +52,7 @@ function JitsiWindow(props) {
       })
     }
   },[localJitsiUserID, API]);
-
+*/
 
   function removeConference() {
     try {
