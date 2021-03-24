@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
 
-    <App />
+    <App style={{height:'100%'}} />
   </React.StrictMode>,
   document.getElementById('root')
 );

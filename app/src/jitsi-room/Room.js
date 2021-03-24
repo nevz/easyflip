@@ -125,7 +125,8 @@ function Room(props) {
   }
 
   if(room){
-    return (<>
+    return (
+    <div style={{ height: '100%' }}>
       {renderJitsiWindow()}
       {roomMenu()}
       {<Notification onAccept={returnToMainRoom} setShow={setShowBreakoutNotification} show={showBreakoutNotification}>
@@ -133,7 +134,7 @@ function Room(props) {
         <p> press accept to go back now, or use the button
           on the botton of your screen later </p>
       </Notification>}
-    </>)
+    </div>)
   }
   else{
     return(<p>Error, no room has been found</p>);

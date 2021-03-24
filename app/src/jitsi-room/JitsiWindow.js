@@ -18,7 +18,7 @@ function JitsiWindow(props) {
       const options = {
         roomName: props.roomName,
         width: '100%',
-        height: 700,
+        height: '100%',
         parentNode: document.getElementById('jitsi')
       };
       const newapi = new window.JitsiMeetExternalAPI(domain, options);
@@ -64,7 +64,7 @@ function JitsiWindow(props) {
   }
 
   return (
-    <div id='jitsi'></div>
+    <div style={{ height: '75%' }} id='jitsi'></div>
   )
 }
 
