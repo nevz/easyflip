@@ -6,6 +6,8 @@ import { OwnerMenu } from './OwnerMenu';
 import { ParticipantMenu } from './ParticipantMenu';
 import { JitsiWindow } from './JitsiWindow';
 import { Notification } from './general/Notification';
+import { useBeforeunload } from 'react-beforeunload';
+
 
 
 function Room(props) {
@@ -17,6 +19,9 @@ function Room(props) {
 
   const [showBreakoutNotification, setShowBreakoutNotification] = useState(false);
   const [showResults, setShowResults] = useState(false);
+
+  //we make the user leave the room if they close the tab
+  useBeforeunload((event) => socket.emit('leaveRoom', roomName))
 
   useEffect(() => {
     socket.on('roomData', getRoomData);
