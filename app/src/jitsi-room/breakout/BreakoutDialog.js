@@ -72,9 +72,6 @@ function BreakoutDialog(props) {
 
                 </div>
             </>
-
-
-
         )
     }
 

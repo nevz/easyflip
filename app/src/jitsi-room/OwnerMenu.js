@@ -1,6 +1,6 @@
 
 import Button from 'react-bootstrap/Button';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { socket } from './socket';
 import { NewPoll } from './polls/NewPoll';
@@ -8,8 +8,17 @@ import { BreakoutDialog } from './breakout/BreakoutDialog';
 import { ResultsPoll } from './polls/ResultsPoll';
 
 
-function OwnerMenu({room=null, pollId=""}) {
+function OwnerMenu({ room = null, pollId = "" }) {
 
+  useEffect(() => {
+    socket.on('roomsCreated', showBreakoutRooms);
+  }, [])
+
+
+  //TODO: put the array of received breakoutroomnames into an interface
+  function showBreakoutRooms(breakoutRoomNames) {
+    console.log(breakoutRoomNames);
+  }
 
   function sendToBreakout(breakoutRoomSize, breakoutOption, smartBreakoutOption) {
     socket.emit('sendToBreakout', room.roomName, breakoutRoomSize, breakoutOption, smartBreakoutOption);
@@ -23,7 +32,7 @@ function OwnerMenu({room=null, pollId=""}) {
     socket.emit('forceToMainRoom', room.roomName);
   }
 
-  function showResultsToParticipants(){
+  function showResultsToParticipants() {
     socket.emit('showResults', room.roomName);
   }
 
@@ -40,7 +49,7 @@ function OwnerMenu({room=null, pollId=""}) {
       <div>
         <h3> Poll options</h3>
         <NewPoll getPollId={getPollId} />
-        <ResultsPoll pollId={pollId} owner={true}/>
+        <ResultsPoll pollId={pollId} owner={true} />
         <Button onClick={showResultsToParticipants}>Send results to audience</Button>
 
       </div>

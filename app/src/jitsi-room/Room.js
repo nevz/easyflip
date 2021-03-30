@@ -15,7 +15,7 @@ function Room(props) {
 
   const { roomName } = useParams();
   const [room, setRoom] = useState(null);
-  const [pollId, setPollId] = useState("5ff71dc25938cf2873d7b751");
+  const [pollId, setPollId] = useState("");
 
   const [showBreakoutNotification, setShowBreakoutNotification] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -31,6 +31,7 @@ function Room(props) {
     socket.emit('getRoomData', roomName);
 
     return () => {
+      socket.off('roomData', getRoomData);
       socket.disconnect();
     };
   }, [roomName]);
@@ -47,6 +48,14 @@ function Room(props) {
     socket.on('showResults', notifyShowResults);
     socket.emit('joinRoom', room.roomName);
     console.log('the room is ', room);
+
+    return () => {
+      socket.off('notifyBreakout', goToBreakout);
+      socket.off('pollChanged', pollChanged);
+      socket.off('returnToMainRoom', notifyReturnToMainRoom);
+      socket.off('forceToMainRoom', forceReturnToMainRoom);
+      socket.off('showResults', notifyShowResults);
+    }
   }, [room]);
 
   function leaveRoom() {
@@ -67,6 +76,7 @@ function Room(props) {
 
 
   function notifyReturnToMainRoom(mainRoomName) {
+    console.log(room);
     if (mainRoomName === room.parent) {
       setShowBreakoutNotification(true);
     }
