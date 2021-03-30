@@ -1,3 +1,4 @@
+import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
 import { Poll } from './Poll';
 import { ButtonWithDialog } from '../general/ButtonWithDialog';
@@ -49,13 +50,7 @@ function ResultsPoll({ pollId = "", owner = false }) {
             return (
                 <>
                     <Poll pollId={pollId} alternativeList={listAlternativesResults}></Poll>
-
-                    {
-                        (() => {
-                            if (owner) { return <button type="button" onClick={() => resetResults()}>Reset</button> }
-                        })()
-                    }
-                    <button type="button" onClick={() => getResults(pollId)}>Update</button>
+                    <Button onClick={() => getResults(pollId)}>Update</Button>
                 </>
             )
         }

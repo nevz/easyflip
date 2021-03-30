@@ -20,11 +20,13 @@ function JoinRoom(props) {
             width:"100%",
             height:"100%",
             display: "flex",
+            flexDirection:"column",
             justifyContent: "center",
             alignItems: "center"
           }}>
+            <h1>Easy Flip</h1>
             <form style={{display:"flex", flexDirection:"column"}}onSubmit={() => JoinRoom()}>
-                <input type='text' value={roomName} onChange={(e) => setRoomName(e.target.value)} ></input>
+                <input style={{textAlign:"center"}} type='text' value={roomName} onChange={(e) => setRoomName(e.target.value)} ></input>
                 <Button type='submit'>Join Room</Button>
             </form>
 
