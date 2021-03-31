@@ -30,6 +30,7 @@ function JitsiWindow(props) {
     };
   }, [props.roomName])
 
+  /*
 
   useEffect(() => {
     function videoConferenceJoined(event) {
@@ -64,7 +65,7 @@ function JitsiWindow(props) {
 
 
   }, [localJitsiUserID, API]);
-
+*/
 
   function removeConference() {
     try {
