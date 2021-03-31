@@ -36,11 +36,54 @@ function Room(props) {
     };
   }, [roomName]);
 
+
   useEffect(() => {
     if (!room) {
       console.log('the room doesnt exist', room)
       return;
     }
+
+    function goToBreakout({ breakoutRoomName, originalRoomName }) {
+      console.log('going to breakout from ', room.roomName, ' to ', breakoutRoomName);
+      if (room.roomName === originalRoomName) {
+        history.push(breakoutRoomName);
+      }
+    }
+
+    function notifyReturnToMainRoom(mainRoomName) {
+      console.log(room);
+      if (mainRoomName === room.parent) {
+        setShowBreakoutNotification(true);
+      }
+    }
+
+    function forceReturnToMainRoom(mainRoomName) {
+      if (mainRoomName === room.parent) {
+        returnToMainRoom();
+      }
+    }
+
+
+    function notifyShowResults(fromRoomName) {
+      if (fromRoomName === room.roomName) {
+        setShowResults(true);
+      }
+    }
+
+    //called when the question of the room is changed
+    function pollChanged(fromRoomName, newPollId) {
+      if (room.roomName === fromRoomName) {
+        setShowResults(false);
+        setPollId(newPollId);
+      }
+    }
+
+
+    function returnToMainRoom() {
+      socket.emit('leaveRoom', room.roomName);
+      history.push(room.parent);
+    }
+
     socket.on('notifyBreakout', goToBreakout);
     socket.on('pollChanged', pollChanged);
     socket.on('returnToMainRoom', notifyReturnToMainRoom);
@@ -56,18 +99,13 @@ function Room(props) {
       socket.off('forceToMainRoom', forceReturnToMainRoom);
       socket.off('showResults', notifyShowResults);
     }
-  }, [room]);
+  }, [room, history]);
+
 
   function leaveRoom() {
     socket.emit('leaveRoom', room.roomName);
   }
 
-  function goToBreakout({ breakoutRoomName, originalRoomName }) {
-    console.log('going to breakout from ', room.roomName, ' to ', breakoutRoomName);
-    if (room.roomName === originalRoomName) {
-      history.push(breakoutRoomName);
-    }
-  }
 
   function returnToMainRoom() {
     leaveRoom();
@@ -75,24 +113,7 @@ function Room(props) {
   }
 
 
-  function notifyReturnToMainRoom(mainRoomName) {
-    console.log(room);
-    if (mainRoomName === room.parent) {
-      setShowBreakoutNotification(true);
-    }
-  }
 
-  function forceReturnToMainRoom(mainRoomName){
-    if(mainRoomName === room.parent){
-      returnToMainRoom();
-    }
-  }
-
-  function notifyShowResults(fromRoomName){
-    if(fromRoomName === room.roomName){
-      setShowResults(true);
-    }
-  }
 
 
   //is called when socket receives the roomData event. Sets the room to a new one
@@ -102,13 +123,7 @@ function Room(props) {
     setPollId(newRoom.pollId);
   }
 
-  //called when the question of the room is changed
-  function pollChanged(fromRoomName, newPollId) {
-    if (room.roomName === fromRoomName) {
-      setShowResults(false);
-      setPollId(newPollId);
-    }
-  }
+
 
   function renderJitsiWindow() {
     if (room) {
@@ -134,22 +149,22 @@ function Room(props) {
     }
   }
 
-  if(room){
+  if (room) {
     return (
-    <div style={{ height: '100%' }}>
-      {renderJitsiWindow()}
-      {roomMenu()}
-      {<Notification onAccept={returnToMainRoom} setShow={setShowBreakoutNotification} show={showBreakoutNotification}>
-        <h4>You have been requested to go back to the main room by the admin</h4>
-        <p> press accept to go back now, or use the button
+      <div style={{ height: '100%' }}>
+        {renderJitsiWindow()}
+        {roomMenu()}
+        {<Notification onAccept={returnToMainRoom} setShow={setShowBreakoutNotification} show={showBreakoutNotification}>
+          <h4>You have been requested to go back to the main room by the admin</h4>
+          <p> press accept to go back now, or use the button
           on the botton of your screen later </p>
-      </Notification>}
-    </div>)
+        </Notification>}
+      </div>)
   }
-  else{
-    return(<p>Error, no room has been found</p>);
+  else {
+    return (<p>Error, no room has been found</p>);
   }
-  
+
 
 }
 

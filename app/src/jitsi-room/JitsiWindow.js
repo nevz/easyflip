@@ -30,29 +30,41 @@ function JitsiWindow(props) {
     };
   }, [props.roomName])
 
-  /*
+
   useEffect(() => {
+    function videoConferenceJoined(event) {
+      setLocalJitsiUserID(event.id.toString());
+      socket.emit("jitsiUser", event.displayName);
+    }
+
     if (API) {
       console.log("HELLOOOO")
 
-      API.addListener('videoConferenceJoined', (event) => {
-        setLocalJitsiUserID(event.id.toString());
-        socket.emit("jitsiUser", event.displayName);
-      });
+      API.addListener('videoConferenceJoined', videoConferenceJoined);
+      return () => {
+        API.removeListener('videoConferenceJoined', videoConferenceJoined);
+      }
     }
   }, [API]);
 
   useEffect(() => {
-    if(localJitsiUserID!==""){
-      API.addListener('displayNameChange', (event) => {
-        console.log("user changing name");
-        if (event.id === localJitsiUserID) {
-          socket.emit("jitsiUser", event.displayname);
-        }
-      })
+    function nameChanged(event) {
+      console.log("user changing name");
+      if (event.id === localJitsiUserID) {
+        socket.emit("jitsiUser", event.displayname);
+      }
     }
-  },[localJitsiUserID, API]);
-*/
+
+    if (localJitsiUserID !== "") {
+      API.addListener('displayNameChange', nameChanged);
+      return () => {
+        API.removeListener('displayNameChange', nameChanged)
+      };
+    }
+
+
+  }, [localJitsiUserID, API]);
+
 
   function removeConference() {
     try {
