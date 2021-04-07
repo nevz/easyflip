@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { socket } from './socket';
 import { NewPoll } from './polls/NewPoll';
 import { BreakoutDialog } from './breakout/BreakoutDialog';
+import { BreakoutRoomsDisplay } from './breakout/BreakoutRoomsDisplay';
 import { ResultsPoll } from './polls/ResultsPoll';
 
 
@@ -59,6 +60,7 @@ function OwnerMenu({ room = null, pollId = "" }) {
         <Button onClick={forceToMainRoom}>Force to main room</Button>
 
         <BreakoutDialog sendToBreakout={sendToBreakout} />
+        <BreakoutRoomsDisplay room={room}></BreakoutRoomsDisplay>
       </div>
     </div>
   );

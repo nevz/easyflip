@@ -21,8 +21,8 @@ function BreakoutDialog(props) {
 
     return (
         <ButtonWithDialog
-            headerText='Breakout Rooms'
-            buttonText='Breakout Rooms'
+            headerText='Create Breakout Rooms'
+            buttonText='Create Breakout Rooms'
             footer={<Button onClick={sendToBreakout}>Submit</Button>}>
             {renderContents()}
         </ButtonWithDialog>
