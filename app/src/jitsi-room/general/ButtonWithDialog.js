@@ -19,11 +19,11 @@ function ButtonWithDialog({children, footer, buttonText, headerText, onClick=()=
                 {buttonText}
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal style={{maxWidth:'100%'}} show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>{ headerText }</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{ children }</Modal.Body>
+                <Modal.Body >{ children }</Modal.Body>
                 <Modal.Footer>
                     <Button variant='secondary' onClick={handleClose}>Close</Button>
                     { footer }
