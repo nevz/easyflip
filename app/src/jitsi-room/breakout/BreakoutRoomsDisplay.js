@@ -20,22 +20,21 @@ function BreakoutRoomsDisplay({ room = undefined }) {
         return () => {
             socket.off("currentBreakoutRooms", getBreakoutRooms);
         }
-    }, room)
+    }, [room])
 
     function renderContents() {
-        if(breakoutRooms.size > 0){
+        if (breakoutRooms.length > 0) {
+            console.log("helo")
             const rows = breakoutRooms.map((aRoom, index) => {
-                if (aRoom) {
-                    console.log(aRoom.connectedUsers);
-                    return (
-                        <tr>
-                            <td>{aRoom.roomName}</td>
-                            <td>{aRoom.connectedUsers.length}</td>
-                            <td><Button onClick={() => history.push(aRoom.roomName)}>Join</Button></td>
-                        </tr>
-                    )
-                }
+                return (
+                    <tr>
+                        <td>{aRoom.roomName}</td>
+                        <td>{aRoom.connectedUsers.length}</td>
+                        <td><Button onClick={() => history.push(aRoom.roomName)}>Join</Button></td>
+                    </tr>
+                )
             }
+
             )
             return (
                 <table>
@@ -43,18 +42,15 @@ function BreakoutRoomsDisplay({ room = undefined }) {
                         <th>Room Name</th>
                         <th>Participants</th>
                         <th>Join room</th>
-                        </tr></thead>
+                    </tr></thead>
                     <tbody>{rows}</tbody>
                 </table>);
         }
-        else{
+        else {
             return;
         }
-        
+
     }
-
-
-
 
     return (
         <ButtonWithDialog
