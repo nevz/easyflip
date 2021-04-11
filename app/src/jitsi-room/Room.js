@@ -157,7 +157,7 @@ function Room(props) {
         {<Notification onAccept={returnToMainRoom} setShow={setShowBreakoutNotification} show={showBreakoutNotification}>
           <h4>You have been requested to go back to the main room by the admin</h4>
           <p> press accept to go back now, or use the button
-          on the botton of your screen later </p>
+          on the bottom of your screen later </p>
         </Notification>}
       </div>)
   }
