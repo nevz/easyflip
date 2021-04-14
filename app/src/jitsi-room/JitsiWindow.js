@@ -72,7 +72,6 @@ function JitsiWindow(props) {
       document.getElementById('jitsi').removeChild((document.getElementById("jitsiConferenceFrame0")));
     } catch (error) {
       console.log('tried to remove conference window but there was none');
-      console.log(error);
     }
   }
 

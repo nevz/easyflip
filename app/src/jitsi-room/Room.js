@@ -112,10 +112,6 @@ function Room(props) {
     history.push(room.parent);
   }
 
-
-
-
-
   //is called when socket receives the roomData event. Sets the room to a new one
   function getRoomData(newRoom) {
     console.log('getting data from room', newRoom);
